@@ -229,7 +229,11 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
    
   processing pipeline：可以通过pipeline来过滤某些信息
  
-  还有一个还没看。。。
+  lookup tables 从外部数据找到对应信息。
   
++ lookup tables
+
+  可以从csv导入其他信息，例如可以根据某个ip地址通过lookup找到这个IP地址的地区。
+
 + alert
   
