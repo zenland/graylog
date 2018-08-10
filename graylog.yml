@@ -1,0 +1,31 @@
+version: '2'
+services:
+  
+  mongo:
+    image: mongo:4.1
+    container_name: mongo
+
+  elasticsearch:
+    image: elasticsearch:5.6.10
+    container_name: elasticsearch
+    environment:
+      - http.host=0.0.0.0
+      - xpack.security.enabled=false
+      - elasticsearch_discovery_enabled=false
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  graylog:
+    image: graylog/graylog:2.4.6-1
+    container_name: graylog
+    environment:
+      - GRAYLOG_WEB_ENDPOINT_URI=http://106.75.229.247:5601/api
+    ports:
+      - 5601:9000
+      - 12201:12201
+      - 514:514
+      - 5555:5555
+    depends_on:
+      - mongo
+      - elasticsearch

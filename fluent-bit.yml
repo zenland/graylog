@@ -1,0 +1,14 @@
+version: '2'
+services:
+  
+  fluent-bit:
+    image: fluent-bit:0.13
+    container_name: fluent
+    environment:
+      - TZ=Asia/Shanghai
+      - FLUENT_ELASTICSEARCH_HOST=106.75.229.247
+      - FLUENT_ELASTICSEARCH_PORT=9200
+    volumes:
+      - /var/:/var
+      - ./config_fluent-bit/:/fluent-bit/etc/
+
