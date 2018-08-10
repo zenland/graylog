@@ -1,4 +1,4 @@
-# graylog 部署简单说明
+# graylog 部署说明
 ## 环境
 
 mongo:4.1
@@ -41,6 +41,8 @@ kibana VS graylog
 
 
 ## 系统说明
+
+graylog中存在流的概念，相当于在消息到来时候，可以根据一些条件将消息分为不同的流中，在访问控制，decator和pipeline使用中都直接以流为单位。
 
 + 访问控制
 
@@ -125,5 +127,27 @@ kibana VS graylog
   graylog中有stream的概念，可以新建一个stream，定义满足某个规则的为异常，查询该流变化情况，即可得到某个时间段内的异常情况。
   
 
++ extractor:
    
+  在graylog接收到消息时，这些消息可能不能被正确的解析，用户可以自定义规则来解析接收到的消息。
+   
+  （使用fluent-bit中es方法转发到graylog，graylog会将其解析为字符串，并且放到message字段中，可以使用extractor来解析这个json格式的字符串，使用fluentd方法转发直接就能够正确解析了，不需要再使用extractor）
 
++ decorator
+ 
+  在搜索的时候执行，任何改变不会对es中数据有影响,目的就是显示的时候可以个性化一点
+   
+  包括
+  
+  syslog security: graylog存储时默认有level字段，这个就可以将level的数字映射为alert，warn，error等
+   
+  format string：可以自定义字符串显示
+   
+  processing pipeline：可以通过pipeline来过滤某些信息
+ 
+ 
++ pipeline
+   
+  与流关联，对某一个流中的消息首先经过一系列的rule来过滤，接着使用定义的action来对消息进行处理。
+  
+  测试还未成功，这个会对es做出改变吗？
