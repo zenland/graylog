@@ -84,17 +84,17 @@ kibana VS graylog
   
   在某一时间段内某个查询语句查询到的消息数量:
   
-  ![](./search_result_histogram_charts.PNG)  
+  ![](./img/search_result_histogram_charts.PNG)  
   
   
   某一个时间段内统计信息:
   
-  ![](./statistical_value.PNG)
+  ![](./img/statistical_value.PNG)
   
   
   并且这个图形能够显示变化趋势，并且指定上升或者下降为期望值（相应的趋势颜色会变成绿色，反之变为红色）:
   
-  ![](./statistical_value_2.PNG)  
+  ![](./img/statistical_value_2.PNG)  
   
   
   某一个时间段内某一个字段变化，可有bar，area，line，spot四种展示方式:
