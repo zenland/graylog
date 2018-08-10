@@ -6,19 +6,92 @@ mongo:4.1
 graylog:2.4.6-1
 
 elasticsearch: 5.6.10
+
+## 配置
+
+这个信息收集与转发的流程为：
+
+fluent-bit收集cpu信息，将其转发给fluentd，接着fluentd将收到的消息转发给graylog。
+  
+以收集cpu信息为例，以下涉及文件在graylog文件夹下
+
+graylog.yml文件
+
+主要配置graylog的9000对应的端口，这个是网站的入口。
+
+其余的端口映射是graylog接收消息的端口
+
+fluent-bit.yml文件
+
+主要配置fluent-bit收集信息的配置文件与容器内的文件对应
+
+        volumes:
+      - /var/:/var
+      - ./config_fluent-bit/:/fluent-bit/etc/
+
+
+
+fluentd.yml文件
+
+主要配置fluentd接收fluent-bit转发消息的监听端口与外部的映射关系
+
+        ports:
+      - 24224:24224
+外部端口24224与内部端口的映射
+
+config_fluent-bit/fluent-bit.conf文件
+
+主要配置OUTPUT的输出方式与输出的host与port
+
+    [OUTPUT]
+      Name            forward
+      Match           *
+      Host            106.75.229.247
+      Port            24224
+
+以上配置文件说明fluent-bit将收集到的cpu信息通过forward的方式转发给fluentd，转发的地址为106.75.229.247，端口为24224（容器外部端口）.
+
+config_fluentd/fluent.conf文件
+
+主要配置fluentd从fluent-bit接收消息的端口与转发到graylog的host和端口，以及输出的type和协议（type和protocol与graylog系统中input的配置有关）
+
+    <source>
+      @type forward
+      bind 0.0.0.0
+      port 24224
+    </source>
+
+    <match **>
+      @type gelf
+      host 106.75.229.247
+      port 5555
+      protocol tcp
+    </match>
+
+以上配置文件说明fluentd从24224（内部端口）接收以forward方式转发来的消息，并且以tcp协议发送到106.75.229.247的5555端口，且发送的数据格式为gelf。
+
+整个消息转发流程如下
+
+fluent-bit收集消息-->106.75.229.247:24224-->fluentd内部端口24224-->fluentd从内部端口24224接收到转发来的消息-->将消息发送到106.75.229.247:5555-->graylog接收到消息（需要对input进行配置）
+
 ## 启动
 
 + 启动graylog 
 
       docker-compose up
+ 
++ 启动fluentd
+
+      docker-compose -f fluentd.yml up
+      
   
 + 启动fluent-bit
  
    这一步需要在graylog中添加了input以后进行，而且graylog的iniput监听端口应该与fluent-bit输出端口一致
  
       docker-compose -f fluent.yml up
-
-
+  
+  
 ## 待解决
 
 graylog显示乱码问题
@@ -139,6 +212,8 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
    
   与流关联，对某一个流中的消息首先经过一系列的rule来过滤，接着使用定义的action来对消息进行处理。
   
+  action包括，改变某个字段的值，或者丢掉某个消息，改变字段格式，增加字段等。
+  
   会对存储到es中的数据做出相应的更改
 
 
@@ -155,3 +230,6 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
   processing pipeline：可以通过pipeline来过滤某些信息
  
   还有一个还没看。。。
+  
++ alert
+  
