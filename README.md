@@ -99,25 +99,25 @@ kibana VS graylog
   
   某一个时间段内某一个字段变化，可有bar，area，line，spot四种展示方式:
   
-  ![](./field_value_charts_bar.PNG)
+  ![](./img/field_value_charts_bar.PNG)
   
-  ![](./field_value_charts.PNG)
+  ![](./img/field_value_charts.PNG)
   
-  ![](./field_value_charts_line.PNG)
+  ![](./img/field_value_charts_line.PNG)
   
-  ![](./field_value_charts_spot.PNG)
+  ![](./img/field_value_charts_spot.PNG)
   
   
   
   多个图形可以叠加:
   
-  ![](./stacked_charts.PNG)
+  ![](./img/stacked_charts.PNG)
   
   
   
   某一段时间内某个字段出现的value的数量统计信息:
   
-  ![](./quick_value_quick_value_results.PNG)
+  ![](./img/quick_value_quick_value_results.PNG)
   
   
 + 异常值
