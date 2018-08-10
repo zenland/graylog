@@ -135,6 +135,13 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
    
   （使用fluent-bit中es方法转发到graylog，graylog会将其解析为字符串，并且放到message字段中，可以使用extractor来解析这个json格式的字符串，使用fluentd方法转发直接就能够正确解析了，不需要再使用extractor）
 
++ pipeline
+   
+  与流关联，对某一个流中的消息首先经过一系列的rule来过滤，接着使用定义的action来对消息进行处理。
+  
+  会对存储到es中的数据做出相应的更改
+
+
 + decorator
  
   在搜索的时候执行，任何改变不会对es中数据有影响,目的就是显示的时候可以个性化一点
@@ -147,9 +154,4 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
    
   processing pipeline：可以通过pipeline来过滤某些信息
  
- 
-+ pipeline
-   
-  与流关联，对某一个流中的消息首先经过一系列的rule来过滤，接着使用定义的action来对消息进行处理。
-  
-  测试还未成功，这个会对es做出改变吗？
+  还有一个还没看。。。
