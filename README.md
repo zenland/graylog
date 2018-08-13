@@ -43,30 +43,30 @@ elasticsearch: 5.6.10
 
   主要配置OUTPUT的输出方式与输出的host与port
 
-    [OUTPUT]
-      Name            forward
-      Match           *
-      Host            106.75.229.247
-      Port            24224
-
+      [OUTPUT]
+        Name            forward
+        Match           *
+        Host            106.75.229.247
+        Port            24224
+  
   以上配置文件说明fluent-bit将收集到的cpu信息通过forward的方式转发给fluentd，转发的地址为106.75.229.247，端口为24224（容器外部端口）.
 
 + config_fluentd/fluent.conf文件
 
   主要配置fluentd从fluent-bit接收消息的端口与转发到graylog的host和端口，以及输出的type和协议（type和protocol与graylog系统中input的配置有关）
 
-    <source>
-      @type forward
-      bind 0.0.0.0
-      port 24224
-    </source>
-
-    <match **>
-      @type gelf
-      host 106.75.229.247
-      port 5555
-      protocol tcp
-    </match>
+      <source>
+        @type forward
+        bind 0.0.0.0
+        port 24224
+      </source>
+  
+      <match **>
+        @type gelf
+        host 106.75.229.247
+        port 5555
+        protocol tcp
+      </match>
 
   以上配置文件说明fluentd从24224（内部端口）接收以forward方式转发来的消息，并且以tcp协议发送到106.75.229.247的5555端口，且发送的数据格式为gelf。
 
