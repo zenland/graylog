@@ -241,8 +241,8 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
       transport_email_use_auth = true
       #transport_email_use_tls = true
       transport_email_use_ssl = false
-      transport_email_auth_username = 15201702756@163.com
-      transport_email_auth_password = zhang123
+      transport_email_auth_username = XX@163.com
+      transport_email_auth_password = XX
       transport_email_subject_prefix = [graylog]
       #transport_email_from_email = graylog@example.com
       
