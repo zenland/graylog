@@ -92,25 +92,6 @@ fluent-bit收集消息-->106.75.229.247:24224-->fluentd内部端口24224-->fluen
       docker-compose -f fluent.yml up
   
   
-## 待解决
-
-graylog显示乱码问题
-
-解决方案：经过fluentd转发，使用fluentd的gelf插件，输入到graylog中
-
-！！ 需要进入到fluentd容器内添加gelf插件
-
-    gem install fluent-plugin-gelf-hs
-    
-    
-
-user访问
-
-数据retention机制
-
-dashboard
-
-kibana VS graylog
 
 
 ## 系统说明
@@ -195,7 +176,7 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
   ![](./img/quick_value_quick_value_results.PNG)
   
   
-+ 异常值
++ 异常值显示
 
   graylog中有stream的概念，可以新建一个stream，定义满足某个规则的为异常，查询该流变化情况，即可得到某个时间段内的异常情况。
   
@@ -236,4 +217,36 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
   可以从csv导入其他信息，例如可以根据某个ip地址通过lookup找到这个IP地址的地区。
 
 + alert
+  
+  
+  alert仍是以流为单位来告警，alert包括两部分：配置告警condition和配置notification方式。其中condition与某一流关联而notification也与某一个流关联，满足了condition的消息会找到该流对应的notification，从而进行告警。
+  
+  支持两种警告方式，http和email。
+  
+  告警条件：message count：在过去一段时间内，某一消息的数量。
+  
+  field aggregation：在一段时间内，某一字段的统计结果是否超过了某一值。
+  
+  field content：某一字段为某值时进行alert。
+  
+  email告警：
+  
+  需要更改配置文件graylog.conf，并且将其挂载到容器内的：/usr/share/graylog/data/config/graylog.conf 目录下。
+  
+  其中graylog.conf中需要更改的内容如下： 
+
+      transport_email_enabled = true
+      transport_email_hostname = smtp.163.com
+      transport_email_port = 25
+      transport_email_use_auth = true
+      #transport_email_use_tls = true
+      transport_email_use_ssl = false
+      transport_email_auth_username = 15201702756@163.com
+      transport_email_auth_password = zhang123
+      transport_email_subject_prefix = [graylog]
+      #transport_email_from_email = graylog@example.com
+      
+ 接着在graylog系统的alert页面增加condition和notification即可。
+
+
   
