@@ -29,3 +29,5 @@ services:
     depends_on:
       - mongo
       - elasticsearch
+    volumes:
+      - ./graylog.conf:/usr/share/graylog/data/config/graylog.conf
