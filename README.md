@@ -262,7 +262,7 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
      
      在telegram alert的源码基础上更改增加钉钉报警方式，telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
      
-     需要将钉钉告警插件添加到graylog容器中，该插件地址./jar/中
+     改写后的源码地址：当前目录下的`dingding/`中，改写后生成的jar包在当前目录下的`./jar/`中。使用时需要将钉钉告警插件添加到graylog容器中。
      
      graylog.yml文件需要增加配置如下：
      
