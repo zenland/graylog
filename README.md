@@ -229,24 +229,27 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
   
   field content：某一字段为某值时进行alert。
   
-  email告警：
+  + email告警：
   
-  需要更改配置文件graylog.conf，并且将其挂载到容器内的：/usr/share/graylog/data/config/graylog.conf 目录下。
+    需要更改配置文件graylog.conf，并且将其挂载到容器内的：/usr/share/graylog/data/config/graylog.conf 目录下。
   
-  其中graylog.conf中需要更改的内容如下： 
+    其中graylog.conf中需要更改的内容如下： 
 
-      transport_email_enabled = true
-      transport_email_hostname = smtp.163.com
-      transport_email_port = 25
-      transport_email_use_auth = true
-      #transport_email_use_tls = true
-      transport_email_use_ssl = false
-      transport_email_auth_username = XX@163.com
-      transport_email_auth_password = XX
-      transport_email_subject_prefix = [graylog]
-      #transport_email_from_email = graylog@example.com
+        transport_email_enabled = true
+        transport_email_hostname = smtp.163.com
+        transport_email_port = 25
+        transport_email_use_auth = true
+        #transport_email_use_tls = true
+        transport_email_use_ssl = false
+        transport_email_auth_username = XX@163.com
+        transport_email_auth_password = XX
+        transport_email_subject_prefix = [graylog]
+        #transport_email_from_email = graylog@example.com
       
- 接着在graylog系统的alert页面增加condition和notification即可。
+     接着在graylog系统的alert页面增加condition和notification即可。
+     
+   + dingding 告警
+   
 
 
   
