@@ -249,7 +249,22 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
      接着在graylog系统的alert页面增加condition和notification即可。
      
    + dingding 告警
-   
+     
+     在telegram alert的源码基础上更改增加钉钉报警方式，telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
+     
+     需要将钉钉告警插件添加到graylog容器中，该插件地址./jar/中
+     
+     graylog.yml文件需要增加配置如下：
+     
+         volumes:
+          - ./graylog.conf:/usr/share/graylog/data/config/graylog.conf
+          - ./jar/original-telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/original-telegram-alert-2.1.2-SNAPSHOT.jar
+          - ./jar/telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
+
+     以上挂载jar包的目的地址为graylog容器的插件地址。
+     
+     接着重启graylog，在新增notification的告警方式中选择Dingtalk Alert，并且添加相应的webhook地址即可。
+     
 
 
   
