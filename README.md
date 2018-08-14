@@ -223,11 +223,18 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
   
   支持两种警告方式，http和email。
   
-  告警条件：message count：在过去一段时间内，某一消息的数量。
+  告警条件：
+  > message count：在过去一段时间内，某一消息的数量。
   
-  field aggregation：在一段时间内，某一字段的统计结果是否超过了某一值。
+  > field aggregation：在一段时间内，某一字段的统计结果是否超过了某一值。
   
-  field content：某一字段为某值时进行alert。
+  > field content：某一字段为某值时进行alert。
+  
+  一些condition的参数说明：
+    
+    默认graylog会每隔一分钟检查一次是否该告警条件还满足，如果仍然满足，根据Repeat notifications 是否勾选来选择是否继续报警，若勾选则报警，否则，不再报警。即便在每次检查时候发现有很多消息都满足告警条件，在每次检查后也只是最多发送一条消息。
+    告警时间间隔由graylog.conf文件中的`alert_check_interval `决定。
+    事实上，graylog似乎对每一条消息都检查一下其是否满足告警条件，接着以一分钟为单位来告警。
   
   + email告警：
   
@@ -255,7 +262,7 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
      
      在telegram alert的源码基础上更改增加钉钉报警方式，telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
      
-     需要将钉钉告警插件添加到graylog容器中，该插件地址./jar/中
+     改写后的源码地址：当前目录下的`dingding/`中，改写后生成的jar包在当前目录下的`./jar/`中。使用时需要将钉钉告警插件添加到graylog容器中。
      
      graylog.yml文件需要增加配置如下：
      
