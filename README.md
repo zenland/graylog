@@ -29,16 +29,6 @@ elasticsearch: 5.6.10
       - /var/:/var
       - ./config_fluent-bit/:/fluent-bit/etc/
 
-
-
-+ fluentd.yml文件
-
-  主要配置fluentd接收fluent-bit转发消息的监听端口与外部的映射关系
-
-        ports:
-      - 24224:24224
-  外部端口24224与内部端口的映射
-
 + config_fluent-bit/fluent-bit.conf文件
 
   主要配置OUTPUT的输出方式与输出的host与port
@@ -50,6 +40,15 @@ elasticsearch: 5.6.10
         Port            24224
   
   以上配置文件说明fluent-bit将收集到的cpu信息通过forward的方式转发给fluentd，转发的地址为106.75.229.247，端口为24224（容器外部端口）.
+
++ fluentd.yml文件
+
+  主要配置fluentd接收fluent-bit转发消息的监听端口与外部的映射关系
+
+        ports:
+      - 24224:24224
+      
+  外部端口24224与内部端口的映射
 
 + config_fluentd/fluent.conf文件
 
