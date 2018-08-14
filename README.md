@@ -229,24 +229,45 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
   
   field content：某一字段为某值时进行alert。
   
-  email告警：
+  + email告警：
   
-  需要更改配置文件graylog.conf，并且将其挂载到容器内的：/usr/share/graylog/data/config/graylog.conf 目录下。
-  
-  其中graylog.conf中需要更改的内容如下： 
+    需要更改配置文件graylog.conf，并且将其挂载到容器内的：/usr/share/graylog/data/config/graylog.conf 目录下,如下所示。
+    
+             volumes:
+          - ./graylog.conf:/usr/share/graylog/data/config/graylog.conf
+         
+    其中graylog.conf中需要更改的内容如下： 
 
-      transport_email_enabled = true
-      transport_email_hostname = smtp.163.com
-      transport_email_port = 25
-      transport_email_use_auth = true
-      #transport_email_use_tls = true
-      transport_email_use_ssl = false
-      transport_email_auth_username = XX@163.com
-      transport_email_auth_password = XX
-      transport_email_subject_prefix = [graylog]
-      #transport_email_from_email = graylog@example.com
+        transport_email_enabled = true
+        transport_email_hostname = smtp.163.com
+        transport_email_port = 25
+        transport_email_use_auth = true
+        #transport_email_use_tls = true
+        transport_email_use_ssl = false
+        transport_email_auth_username = XX@163.com
+        transport_email_auth_password = XX
+        transport_email_subject_prefix = [graylog]
+        #transport_email_from_email = graylog@example.com
       
- 接着在graylog系统的alert页面增加condition和notification即可。
+     接着在graylog系统的alert页面增加condition和notification即可。
+     
+   + dingding 告警
+     
+     在telegram alert的源码基础上更改增加钉钉报警方式，telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
+     
+     需要将钉钉告警插件添加到graylog容器中，该插件地址./jar/中
+     
+     graylog.yml文件需要增加配置如下：
+     
+         volumes:
+          - ./graylog.conf:/usr/share/graylog/data/config/graylog.conf
+          - ./jar/original-telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/original-telegram-alert-2.1.2-SNAPSHOT.jar
+          - ./jar/telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
+
+     以上挂载jar包的目的地址为graylog容器的插件地址。
+     
+     接着重启graylog，在新增notification的告警方式中选择Dingtalk Alert，并且添加相应的webhook地址即可。
+     
 
 
   
