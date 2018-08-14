@@ -231,8 +231,11 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
   
   + email告警：
   
-    需要更改配置文件graylog.conf，并且将其挂载到容器内的：/usr/share/graylog/data/config/graylog.conf 目录下。
-  
+    需要更改配置文件graylog.conf，并且将其挂载到容器内的：/usr/share/graylog/data/config/graylog.conf 目录下,如下所示。
+    
+             volumes:
+          - ./graylog.conf:/usr/share/graylog/data/config/graylog.conf
+         
     其中graylog.conf中需要更改的内容如下： 
 
         transport_email_enabled = true
