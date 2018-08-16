@@ -13,6 +13,7 @@ elasticsearch: 5.6.10
 + graylog.yml文件
 
   主要配置graylog的9000对应的端口，这个是网站的入口。
+  
   其余的端口映射是graylog接收消息的端口
 
 + fluent-bit.yml文件
