@@ -9,6 +9,7 @@ services:
       - FLUENT_ELASTICSEARCH_HOST=106.75.229.247
       - FLUENT_ELASTICSEARCH_PORT=9200
     volumes:
+      - /var/log/message/:/var/log/message
       - /var/:/var
       - ./config_fluent-bit/:/fluent-bit/etc/
 

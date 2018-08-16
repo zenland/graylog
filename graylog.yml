@@ -26,6 +26,7 @@ services:
       - 12201:12201
       - 514:514
       - 5555:5555
+      - 80:5044
     depends_on:
       - mongo
       - elasticsearch
