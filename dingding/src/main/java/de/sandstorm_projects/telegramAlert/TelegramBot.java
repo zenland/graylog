@@ -37,13 +37,14 @@ class TelegramBot {
     private Logger logger;
     private String parseMode;
     private String proxy;
+    private String my_message;
 
     TelegramBot(Configuration config) {
         this.token = config.getString(Config.TOKEN);
         this.chat = config.getString(Config.CHAT);
         this.parseMode = config.getString(Config.PARSE_MODE);
         this.proxy = config.getString(Config.PROXY);
-
+        this.my_message=config.getString(Config.MESSAGE);
         logger = Logger.getLogger("TelegramAlert");
     }
 
@@ -52,8 +53,8 @@ class TelegramBot {
 
 
         client = HttpClients.createDefault();
-        logger.warning(msg);
-
+       
+        logger.warning("............................................................");
         HttpPost request = new HttpPost(token);
         request.addHeader("Content-Type", "application/json; charset=utf-8");
         String msgtype=parseMode;
@@ -68,7 +69,7 @@ class TelegramBot {
         }
 String textMsg = "{ \"msgtype\": \"text\", \"text\": {\"content\": \"this is a test\"}}";
         StringEntity se = new StringEntity(str, "utf-8");
-        logger.warning(str);
+        //logger.warning(str);
         try {
             request.setEntity(se);
 

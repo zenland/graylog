@@ -32,5 +32,7 @@ services:
       - elasticsearch
     volumes:
       - ./graylog.conf:/usr/share/graylog/data/config/graylog.conf
-      - /home/jane/dingding/target/original-telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/original-telegram-alert-2.1.2-SNAPSHOT.jar
-      - /home/jane/dingding/target/telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
+#      - /home/jane/dingding/target/original-telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/original-telegram-alert-2.1.2-SNAPSHOT.jar
+#     - /home/jane/dingding/target/telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
+      - /home/jane/DingAlert/target/original-telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/original-telegram-alert-2.1.2-SNAPSHOT.jar
+      - /home/jane/DingAlert/target/telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
