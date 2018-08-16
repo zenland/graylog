@@ -47,11 +47,7 @@ elasticsearch: 5.6.10
 + 启动graylog 
 
       docker-compose -f graylog.yml up
- 
-+ 启动fluentd
-
-      docker-compose -f fluentd.yml up
-      
+     
   
 + 启动fluent-bit
  
