@@ -34,7 +34,6 @@ elasticsearch: 5.6.10
         Host            106.75.229.247
         Port            5555
   
-  以上配置文件说明fluent-bit将收集到的cpu信息通过forward的方式转发给fluentd，转发的地址为106.75.229.247，端口为5555（容器外部端口）.
 
 
 + 整个消息转发流程如下
@@ -66,22 +65,32 @@ fluent-bit以es格式输出到graylog监听端口5555。
 
 graylog因为以RawTcp方式接收消息，所以会收到一些http请求头，需要对消息进行过滤，过滤过程如下：
 
-> extractor: graylog指定以grok方式解析收到的消息，并且自己定义正则表达式来对收到的日志信息进行解析，解析的目的是从收到的字符串中抽出每个字段的值，并且将其设为对应字段。
++ extractor: 
+
+  对input进行解析
+  
+  graylog指定以grok方式解析收到的消息，并且自己定义正则表达式来对收到的日志信息进行解析，解析的目的是从收到的字符串中抽出每个字段的值，并且将其设为对应字段。
+  
+  （因为目前收到的message有三种格式，所以对三种格式设置了三种extractor，除此之外，demo中又设置了几个extractor，目的是将'\'和'\n'替换为空格。）
 
 
-> pipeline： 因为能够解析的日志信息都有level字段，而不能解析的http请求头没有level字段，所以需要设置pipeline来根据这个条件删除无用的消息，对应的rule如下：
++ pipeline： 
 
-    rule "del"
-    when
-      !has_field("level")
-    then
-      drop_message();
-    end
-最后把该pipeline与需要过滤的stream和该rule关联即可。
+  对stream进行过滤
+  
+  因为能够解析的日志信息都有level字段，而不能解析的http请求头没有level字段，所以需要设置pipeline来根据这个条件删除无用的消息，对应的rule如下：
+
+      rule "del"
+      when
+        !has_field("level")
+      then
+        drop_message();
+      end
+  最后把该pipeline与需要过滤的stream和该rule关联即可。
 
 ## 系统说明
 
-graylog中存在流的概念，相当于在消息到来时候，可以根据一些条件将消息分为不同的流中，并且可以指定某一个流的index。消息首先会经过all message这个stream，不管该message符合多少的stream条件，如果该message存储为default index的话，该message只会存储一次。但是如果该message所对应的index非default index，而且在配置时候 remove from all message未勾选，则该message会在es中存储多次。在访问控制，decorator和pipeline,alert 使用中都直接以流为单位。
+  graylog中存在流的概念，相当于在消息到来时候，可以根据一些条件将消息分为不同的流中，并且可以指定某一个流的index。消息首先会经过all message这个stream，不管该message符合多少的stream条件，如果该message存储为default index的话，该message只会存储一次。但是如果该message所对应的index非default index，而且在配置时候 remove from all message未勾选，则该message会在es中存储多次。在访问控制，decorator和pipeline,alert 使用中都直接以流为单位。
 
 + 访问控制
 
@@ -171,6 +180,8 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
 + extractor:
    
   在graylog接收到消息时，这些消息可能不能被正确的解析，用户可以自定义规则来解析接收到的消息。
+  
+  extractor有顺序，代表解析的顺序。
    
   （使用fluent-bit中es方法转发到graylog，graylog会将其解析为字符串，并且放到message字段中，可以使用extractor来解析这个json格式的字符串，使用fluentd方法转发直接就能够正确解析了，不需要再使用extractor）
 
