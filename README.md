@@ -37,10 +37,10 @@ elasticsearch: 5.6.10
   以上配置文件说明fluent-bit将收集到的cpu信息通过forward的方式转发给fluentd，转发的地址为106.75.229.247，端口为5555（容器外部端口）.
 
 
-
 + 整个消息转发流程如下
 
   fluent-bit收集消息-->将消息发送到  106.75.229.247:5555-->graylog接收到消息（需要对input进行配置）
+
 
 ## 启动
 
@@ -56,7 +56,28 @@ elasticsearch: 5.6.10
       docker-compose -f fluent.yml up
   
   
+## fluent-bit与es的通信
 
+以5555端口为例。
+
+首先graylog需要配置input，指定从5555端口接收消息，接收到的消息为RawTcp。
+
+fluent-bit以es格式输出到graylog监听端口5555。
+
+graylog因为以RawTcp方式接收消息，所以会收到一些http请求头，需要对消息进行过滤，过滤过程如下：
+
+> extractor: graylog指定以grok方式解析收到的消息，并且自己定义正则表达式来对收到的日志信息进行解析，解析的目的是从收到的字符串中抽出每个字段的值，并且将其设为对应字段。
+
+
+> pipeline： 因为能够解析的日志信息都有level字段，而不能解析的http请求头没有level字段，所以需要设置pipeline来根据这个条件删除无用的消息，对应的rule如下：
+
+    rule "del"
+    when
+      !has_field("level")
+    then
+      drop_message();
+    end
+最后把该pipeline与需要过滤的stream和该rule关联即可。
 
 ## 系统说明
 
