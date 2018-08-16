@@ -9,11 +9,6 @@ elasticsearch: 5.6.10
 
 ## 配置
 
-+ 信息收集与转发的流程为：
-
-  fluent-bit收集cpu信息，将其转发给fluentd，接着fluentd将收到的消息转发给graylog。
-  
-  以收集cpu信息为例，以下涉及文件在graylog文件夹下
 
 + graylog.yml文件
 
@@ -34,44 +29,18 @@ elasticsearch: 5.6.10
   主要配置OUTPUT的输出方式与输出的host与port
 
       [OUTPUT]
-        Name            forward
+        Name            es
         Match           *
         Host            106.75.229.247
-        Port            24224
+        Port            5555
   
-  以上配置文件说明fluent-bit将收集到的cpu信息通过forward的方式转发给fluentd，转发的地址为106.75.229.247，端口为24224（容器外部端口）.
+  以上配置文件说明fluent-bit将收集到的cpu信息通过forward的方式转发给fluentd，转发的地址为106.75.229.247，端口为5555（容器外部端口）.
 
-+ fluentd.yml文件
 
-  主要配置fluentd接收fluent-bit转发消息的监听端口与外部的映射关系
-
-        ports:
-      - 24224:24224
-      
-  外部端口24224与内部端口的映射
-
-+ config_fluentd/fluent.conf文件
-
-  主要配置fluentd从fluent-bit接收消息的端口与转发到graylog的host和端口，以及输出的type和协议（type和protocol与graylog系统中input的配置有关）
-
-      <source>
-        @type forward
-        bind 0.0.0.0
-        port 24224
-      </source>
-  
-      <match **>
-        @type gelf
-        host 106.75.229.247
-        port 5555
-        protocol tcp
-      </match>
-
-  以上配置文件说明fluentd从24224（内部端口）接收以forward方式转发来的消息，并且以tcp协议发送到106.75.229.247的5555端口，且发送的数据格式为gelf。
 
 + 整个消息转发流程如下
 
-  fluent-bit收集消息-->106.75.229.247:24224-->fluentd内部端口24224-->fluentd从内部端口24224接收到转发来的消息-->将消息发送到  106.75.229.247:5555-->graylog接收到消息（需要对input进行配置）
+  fluent-bit收集消息-->将消息发送到  106.75.229.247:5555-->graylog接收到消息（需要对input进行配置）
 
 ## 启动
 
