@@ -256,9 +256,9 @@ graylog因为以RawTcp方式接收消息，所以会收到一些http请求头，
      
    + dingding 告警
      
-     基于官网sample_plugin改写的插件，使用了telegram alert的一些配置。钉钉插件源码地址： ./my_dingding_alert, telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
+     基于官网sample_plugin改写的插件，使用了telegram alert的一些配置。 telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
      
-     改写后的源码地址：当前目录下的`./dingding/`中，改写后生成的jar包在当前目录下的`./jar/`中。使用时需要将钉钉告警插件添加到graylog容器中。
+     改写后的源码地址：当前目录下的`./my_dingding_alert/`中，改写后生成的jar包在当前目录下的`./jar/`中。使用时需要将钉钉告警插件添加到graylog容器中。
      
      graylog.yml文件需要增加配置如下：
      
