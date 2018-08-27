@@ -264,8 +264,9 @@ graylog因为以RawTcp方式接收消息，所以会收到一些http请求头，
      
          volumes:
           - ./graylog.conf:/usr/share/graylog/data/config/graylog.conf
-          - ./jar/original-telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/original-telegram-alert-2.1.2-SNAPSHOT.jar
-          - ./jar/telegram-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
+          - /home/jane/my_graylog_dingding/target/original-dingding-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/original-dingding-alert-2.1.2-SNAPSHOT.jar
+          - /home/jane/my_graylog_dingding/target/dingding-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/dingding-alert-2.1.2-SNAPSHOT.jar
+
 
      以上挂载jar包的目的地址为graylog容器的插件地址。
      
