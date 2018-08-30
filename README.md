@@ -122,7 +122,7 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 在配置了input以后收到的数据是类似于如下格式的：
 
 ```
-
+kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd4e66acf2553a2d4787a5be22d295cdde4bf6aee4591c3722d6348.log	{"message":"\u001b[0mGET / \u001b[32m200 \u001b[0m0.896 ms - -\u001b[0m\\n","k8s_pod_name":"umarkcloud-0","k8s_namespace_name":"staging","k8s_host":"k8s8","k8s_container_name":"saas-staging-umarkcloud","k8s_app":"umarkcloud","Level":"info","time":1535532510}
 ```
 
 
