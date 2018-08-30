@@ -212,6 +212,14 @@ kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd
 ![](./img/10.PNG)
 
 
+经过上述处理在System/Input/Manage Extractors页面，各个extractor的顺序如下：
+
+![](./img/27.PNG)
+
+第一个extractor为删除无用字段extractor，第二个为解析json的extractor。
+
+如果顺序有乱，点击Sort extractors重新排序即可。
+
 
 最后需要保证系统配置中Message Filter Chain 是active状态（也即允许系统使用extractor来解析字符串）
 
@@ -232,13 +240,7 @@ kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd
 ![](./img/13.PNG)
 
 
-经过上述处理在System/Input/Manage Extractors页面，各个extractor的顺序如下：
 
-![](./img/27.PNG)
-
-第一个extractor为删除无用字段extractor，第二个为解析json的extractor。
-
-如果顺序有乱，点击Sort extractors重新排序即可。
 
 ## 删除无用字段（optional）
 
