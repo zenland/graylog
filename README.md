@@ -30,7 +30,7 @@ fluent-bit收集与转发数据配置文件fluent-bit.conf如下：
   Path  /var/log/messages
 
 [OUTPUT]
-  Name            es
+  Name            forward
   Match           *
   Host            106.75.229.247
   Port            5601
