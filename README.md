@@ -12,15 +12,55 @@ fluentd:1.2
 
 # 收集数据
 
+因为fluent-bit的输出数据格式与graylog的输入数据格式不对应，所以使用了fluentd转发方法来将fluent-bit收集到的数据转发给graylog。由fluent-bit收集数据，并且以forward方式转发给fluentd。
 
+以下说明中fluentd与graylog均部署在IP地址为106.75.229.247的主机上。
+
+fluent-bit收集与转发数据配置文件fluent-bit.conf如下：
+
+```
+[SERVICE]
+  Flush         1
+  Log_Level     info
+  Daemon        off
+  Parsers_File  parsers.conf
+
+[INPUT]
+  Name  tail
+  Path  /var/log/messages
+
+[OUTPUT]
+  Name            es
+  Match           *
+  Host            106.75.229.247
+  Port            5601
+
+
+```
+
+fluent-bit启动配置文件如下：
+
+```
+version: '2'
+services:
+  fluent-bit:
+    image: fluent-bit:0.13
+    container_name: fluent
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /var/log/message/:/var/log/message
+      - /var/:/var
+      - ./config_fluent-bit/:/fluent-bit/etc/
+
+```
+以上文件说明fluent-bit将收集的数据以forward方式转发到106.75.229.247的5601端口 。
 
 # 转发数据
 
-因为fluent-bit的输出数据格式与graylog的输入数据格式不对应，所以使用了fluentd转发方法来将fluent-bit收集到的数据转发给graylog。
+由于日志信息较多，如果fluentd与graylog使用TCP方式通信，存在fluentd与graylog保持太多TCP连接的问题，所以这里采用了UDP方式通信。fluentd使用插件tagged-udp（fluentd需要安装插件tagged-udp），使得数据以UDP方式发送，graylog采用Raw/Plaintext UDP方式接收数据。
 
-而且由于日志信息较多，如果fluentd与graylog使用TCP方式通信，存在fluentd与graylog保持太多TCP连接的问题，所以这里采用了UDP方式通信。fluentd使用插件tagged-udp，使得数据以UDP方式发送，graylog采用Raw/Plaintext UDP方式接收数据。
-
-fluentd配置文件如下：
+fluentd配置文件fluent.conf如下：
 
 ```
 <source>
@@ -37,7 +77,7 @@ fluentd配置文件如下：
 </match>
 ```
 
-fluentd启动文件如下：
+fluentd启动文件fluentd.yml如下：
 
 ```
 version: '2'
@@ -51,15 +91,12 @@ services:
       - 5601:5601
 ```
 
-即fluentd从5601（外部）端口接收数据，并且将数据以tagged-udp方式输出到106.75.229.247的5555端口。
+即fluentd从5601（fluent.conf文件source项的port为fluentd的内部5601端口，而fluent-bit将数据发送到了外部5601端口，两个端口的映射在fluentd.yml的prots中指定）端口接收数据，并且将数据以tagged-udp方式输出到106.75.229.247的5555端口。
 
 graylog应从106.75.229.247的5555端口接收数据。
 
 
-
-接着，启动fluent-bit，fluentd，graylog，mongo，elasticsearch即可。
-
-graylog,mongo,elasticsearch启动文件graylog.yml如下
+接着，启动fluent-bit，fluentd，graylog，mongo，elasticsearch即可。graylog,mongo,elasticsearch启动文件graylog.yml如下
 
 ```
 version: '2'
@@ -95,7 +132,7 @@ SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
       - /home/jane/my_graylog_dingding/target/dingding-alert-2.1.2-SNAPSHOT.jar:/usr/share/graylog/plugin/dingding-alert-2.1.2-SNAPSHOT.jar
 ```
 
-由配置文件可知，graylog的web页面在80端口，5555端口为接收数据端口。
+由配置文件可知，graylog的web页面在80（外部）端口，5555端口为接收数据（容器内部）端口（fluentd转发来的数据在5555外部端口，两个端口对映关系在graylog.yml文件中graylog容器配置的ports项进行指定）。
 
 
 
