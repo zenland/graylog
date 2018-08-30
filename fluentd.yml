@@ -1,0 +1,9 @@
+version: '2'
+services:
+   fluentd:
+    image: fluent/fluentd-kubernetes-daemonset:debian-stable-graylog
+    container_name: fluentd
+    volumes:
+      - ./config_fluentd/:/fluentd/etc/
+    ports:
+      - 5601:5601

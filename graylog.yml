@@ -20,13 +20,13 @@ services:
     image: graylog/graylog:2.4.6-1
     container_name: graylog
     environment:
-      - GRAYLOG_WEB_ENDPOINT_URI=http://106.75.229.247:5601/api
+      - GRAYLOG_WEB_ENDPOINT_URI=http://106.75.229.247:80/api
     ports:
       - 80:9000
       - 12201:12201
       - 514:514
+      - 5555:5555/udp
       - 5555:5555
-      - 80:5044
     depends_on:
       - mongo
       - elasticsearch
