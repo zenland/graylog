@@ -105,13 +105,13 @@ SNAPSHOT.jar:/usr/share/graylog/plugin/telegram-alert-2.1.2-SNAPSHOT.jar
 
 graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中System/Input，进入input界面
 
-![](C:\Users\86152\Desktop\选择input.PNG)
+![](./img/选择input.PNG)
 
 
 
 选择Raw/Plaintext UDP 点击Launch new input
 
-![](C:\Users\86152\Desktop\2.PNG)
+![](./img/2.PNG)
 
 在弹出的界面，配置Port（5555）即可。
 
@@ -129,7 +129,7 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 上述消息均存储在message字段中，如下图所示。
 
-![](C:\Users\86152\Desktop\3.PNG)
+![](./img/3.PNG)
 
 需要将该信息分成不同的字段存储并展示，以上述消息为例，希望处理后的结构为message，k8s_pod_name等字段。
 
@@ -144,35 +144,35 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 只需要为该字段新建extractor选择Replace with regular expression
 
-![](C:\Users\86152\Desktop\4.png)
+![](./img/4.png)
 
 
 
 在新页面中填写正则表达式，以及替换的字符，将Store as field填为message，给该规则增添extractor title，接着点击Update extractor即可。
 
-![](C:\Users\86152\Desktop\5.PNG)
+![](./img/5.PNG)
 
-![](C:\Users\86152\Desktop\6.PNG)
+![](./img/6.PNG)
 
 ## 解析json数据
 
 在将无用的信息删除保留json格式的有用信息以后，为message字段添加json extractor即可。
 
-![](C:\Users\86152\Desktop\7.png)
+![](./img/7.png)
 
 
 
 在新页面将Key/value separator一项改为：，接着给该extractor命名，接着点击Update extractor即可。
 
-![](C:\Users\86152\Desktop\8.PNG)
+![](./img/8.PNG)
 
-![](C:\Users\86152\Desktop\9.PNG)
+![](./img/9.PNG)
 
 
 
 在经过这两步以后，消息格式如下所示：
 
-![](C:\Users\86152\Desktop\10.PNG)
+![](./img/10.PNG)
 
 
 
@@ -180,7 +180,7 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 点击系统上方System/Configuration
 
-![](C:\Users\86152\Desktop\11.PNG)
+![](./img/11.PNG)
 
 
 
@@ -188,11 +188,11 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 在下图中点击update
 
-![](C:\Users\86152\Desktop\12.PNG)
+![](./img/12.PNG)
 
 在新弹出页面启用Message Filter Chain
 
-![](C:\Users\86152\Desktop\13.PNG)
+![](./img/13.PNG)
 
 
 
@@ -217,13 +217,13 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 以下配置意思是将log中原本字符串仍保留原来格式，并且将替换后的字符串保存到message字段。
 
-![](C:\Users\86152\Desktop\14.PNG)
+![](./img/14.PNG)
 
-![](C:\Users\86152\Desktop\15.PNG)
+![](./img/15.PNG)
 
 经过上述处理在System/Input/Manage Extractors页面，各个extractor的顺序如下：
 
-![](C:\Users\86152\Desktop\27.PNG)
+![](./img/27.PNG)
 
 第一个extractor为删除无用字段extractor，第二个为解析json的extractor。
 
@@ -239,19 +239,19 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 点击系统上方System/Pipelines
 
-![](C:\Users\86152\Desktop\16.PNG)
+![](./img/16.PNG)
 
 
 
 在新打开界面点击Manage rules
 
-![](C:\Users\86152\Desktop\17.PNG)
+![](./img/17.PNG)
 
 
 
 接着点击Create rules
 
-![](C:\Users\86152\Desktop\18.PNG)
+![](./img/18.PNG)
 
 
 
@@ -259,7 +259,7 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 以下source代码意思为如果message中有"log"字段，那么删除该字段。
 
-![](C:\Users\86152\Desktop\19.PNG)
+![](./img/19.PNG)
 
 
 
@@ -267,33 +267,33 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 点击 Manage Pipelines
 
-![](C:\Users\86152\Desktop\20.PNG)
+![](./img/20.PNG)
 
 新增pipeline，点击Add new pipeline
 
-![](C:\Users\86152\Desktop\21.PNG)
+![](./img/21.PNG)
 
 在新打开页面添加pipeline的title和描述，点击保存
 
-![](C:\Users\86152\Desktop\22.PNG)
+![](./img/22.PNG)
 
 
 
 接着需要将该pipeline与一个stream和一个rule关联，点击该pipeline的edit选项：
 
-![](C:\Users\86152\Desktop\23.PNG)
+![](./img/23.PNG)
 
-![](C:\Users\86152\Desktop\24.PNG)
+![](./img/24.PNG)
 
 在新打开页面点击Edit connections，选择all stream流，并且保存。
 
-![](C:\Users\86152\Desktop\25.PNG)
+![](./img/25.PNG)
 
 
 
 接着需要关联规则，点击State0 的edit选项，在新打开界面添加上述步骤新建的规则，保存即可：
 
-![](C:\Users\86152\Desktop\26.PNG)
+![](./img/26.PNG)
 
 
 
@@ -301,11 +301,11 @@ graylog以UDP格式接收fluentd转发来的数据，点击graylog系统中Syste
 
 点击System/Configuration选项，在Message Processors Configuration 模块点击update更新Message Filter Chain选项在Pipeline Processor选项之前即可：
 
-![](C:\Users\86152\Desktop\12.PNG)
+![](./img/12.PNG)
 
 另外所有extractor的顺序如下：
 
-![](C:\Users\86152\Desktop\28.PNG)
+![](./img/28.PNG)
 
 新增extractor为将message字段替换为log内容的extractor。
 
