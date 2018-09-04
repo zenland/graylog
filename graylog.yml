@@ -23,10 +23,7 @@ services:
       - GRAYLOG_WEB_ENDPOINT_URI=http://106.75.229.247:80/api
     ports:
       - 80:9000
-      - 12201:12201
-      - 514:514
       - 5555:5555/udp
-      - 5555:5555
     depends_on:
       - mongo
       - elasticsearch
