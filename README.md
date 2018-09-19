@@ -570,7 +570,7 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
      基于官网sample_plugin改写的插件，使用了telegram alert的一些配置。 telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
 
      改写后的源码地址：当前目录下的`./my_dingding_alert/`中，改写后生成的jar包在当前目录下的`./jar/`中。使用时需要将钉钉告警插件添加到graylog容器中。
-     自定义报警方法主要是修改``文件中的``函数。
+     自定义报警方法主要是修改`。/my_graylog_dingding/src/main/java/org/graylog/plugins/sample/alerts/SampleAlertNotification.java`文件中的`call`函数。
 
      graylog.yml文件需要增加配置如下：
 
