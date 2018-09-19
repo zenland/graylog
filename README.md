@@ -348,13 +348,14 @@ kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd
 可点击Sort extractors进行排序（最终顺序需如上图）。
 
 
-# 目前系统解析数据流程说明
+# 目前系统解析数据流程说明与后续改进
 主要讲一下截止到2018/9/19日graylog的pipeline处理方式。
-## log字段处理
+## 目前系统解析数据流程说明
+### log字段处理
 有部分数据使用log字段而非message字段来记录log信息，为了统一，需要将message字段填充为log字段内容，并且将log字段删除，这部分使用extractor的copy功能将log信息复制到message中，并且在pipeline中使用stage0的del这个规则删除log字段。
-## 日期处理
+### 日期处理
 这部分的目的是，将原始消息的timestam字段变为collect_time字段，并且将原本以unix时间戳显示的time字段，变为正常的时间表示格式，并且命名为timestamp。这部分主要使用pipeline的stage0中的parse-time这个规则。
-## Level处理
+### Level处理
 由于不同地方收集的日志信息对于leve的表示方式不统一，例如Error可能表示为Err等，所以为了规范level的表示格式，使用以下处理思路：
 
 首先提取出level字段的第一个字母，接着根据第一个字母判断是什么级别，从而将level补充完整。由于规则语法有限，不支持多个when语句，再加上不同平台的日志输出习惯不一样，所以这部分使用了多个pipeline。首先stage0的mongo-db,oboe-rest,oboe-java,peer,trombone,violin,orderer,other1规则用于处理不同格式的日志，提取出level字段的第一个字母。接着stage1的normal-debug,normal-error,normal-info,normal-warn用于根据level的单个字母来规范化level字段的值。
@@ -362,7 +363,7 @@ kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd
 最后stage1的drop-level规则用户将错误提取出来的level字段删除（可能有些消息不具有level字段，而错误的匹配了stage0的某个规则，因而使level字段出现g/t等一类的值）。
 
 另外Level需注意的是，由于graylog内置有level字段，且该字段默认为int类型，所以我们自定义的level字段不能以全为小写的leve命名，否则会报错。目前是将L字母大写。
-## 通用信息处理pipeline（后续规范化后需注意）
+### 通用信息解析
 因为公司的日志信息正在逐渐规范，所以在以后只需要一个规则就能匹配所有的日志。这部分的规则为stage0的normal_message_pipeline规则。该规则能够提取出component,thread-id,level，error-code,session-id,transaction-id字段。一个消息样例如下：
 `[2018-09-18T03:12:00.006Z] [TROMBONE_BaseController#11] -> [ERROR - E333 ] <12345678-1234-1234-123456789123> <12345678-1234-1234-123456789123> Argument passed in must be a single String of 12 bytes or a string of 24 hex characters`
 该规则代码部分如下：
@@ -393,6 +394,7 @@ kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd
     end
 
 这部分为了使规则通用化，我首先定义了COMPONENT,THREAD_ID的规则，定义方法为System/Grok Patterns页面点击新增。
+## 后续可能改进
 
 在后续message格式都规范化以后，需要做出的更改。
 + 情况1，含有log字段的信息仍存在。那么需要删除stage1阶段，以及stage0的除del和normal_message_pipeline以外的所有规则。
