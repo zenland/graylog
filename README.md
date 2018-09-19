@@ -391,9 +391,10 @@ kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd
 
 在后续message格式都规范化以后，需要做出的更改。
 + 情况1，含有log字段的信息仍存在。那么需要删除stage1阶段，以及stage0的除del和normal_message_pipeline以外的所有规则。
-+ 情况2，含有log字段的消息不再存在。需要删除stage1阶段，以及stage0的除normal_message_pipeline以外的所有规则。同时需要删除extractor中的change-log-to-message解析器。
-同时对于上述两种情况的都需要注释掉上述代码的374行（不需要提取level的第一个字母了）。
-如果以后日志中的某个字段内容有更改，比如现在component字段规定其格式为[a-zA-Z0-9]+,如果以后觉得component字段里面可以含-/+/* 这些特殊字符，那么需要在System/Grok Patterns里面对component的正则表达式进行更改。
+  情况2，含有log字段的消息不再存在。需要删除stage1阶段，以及stage0的除normal_message_pipeline以外的所有规则。同时需要删除extractor中的change-log-to-message解析器。
++ 同时对于上述两种情况的都需要注释掉上述代码的374行（不需要提取level的第一个字母了）。
++ 如果以后日志中的某个字段内容有更改（optional）
+  比如现在component字段规定其格式为[a-zA-Z0-9]+,如果以后觉得component字段里面可以含-/+/* 这些特殊字符，那么需要在System/Grok Patterns里面对component的正则表达式进行更改。
 
 
 # 系统说明
