@@ -355,7 +355,12 @@ kube.var.log.containers.umarkcloud-0_staging_saas-staging-umarkcloud-3a01a715ecd
 ## 日期处理
 这部分的目的是，将原始消息的timestam字段变为collect_time字段，并且将原本以unix时间戳显示的time字段，变为正常的时间表示格式，并且命名为timestamp。这部分主要使用pipeline的stage0中的parse-time这个规则。
 ## Level处理
-由于不同地方收集的日志信息对于leve的表示方式不统一，例如Error可能表示为Err等，所以为了规范level的表示格式，使用以下处理思路，首先提取出level字段的第一个字母，接着根据第一个字母判断是什么级别，从而将level补充完整。由于规则语法有限，不支持多个when语句，再加上不同平台的日志输出习惯不一样，所以这部分使用了多个pipeline。首先stage0的mongo-db,oboe-rest,oboe-java,peer,trombone,violin,orderer,other1规则用于处理不同格式的日志，提取出level字段的第一个字母。接着stage1的normal-debug,normal-error,normal-info,normal-warn用于根据level的单个字母来规范化level字段的值。最后stage1的drop-level规则用户将错误提取出来的level字段删除（可能有些消息不具有level字段，而错误的匹配了stage0的某个规则，因而使level字段出现g/t等一类的值）。
+由于不同地方收集的日志信息对于leve的表示方式不统一，例如Error可能表示为Err等，所以为了规范level的表示格式，使用以下处理思路：
+
+首先提取出level字段的第一个字母，接着根据第一个字母判断是什么级别，从而将level补充完整。由于规则语法有限，不支持多个when语句，再加上不同平台的日志输出习惯不一样，所以这部分使用了多个pipeline。首先stage0的mongo-db,oboe-rest,oboe-java,peer,trombone,violin,orderer,other1规则用于处理不同格式的日志，提取出level字段的第一个字母。接着stage1的normal-debug,normal-error,normal-info,normal-warn用于根据level的单个字母来规范化level字段的值。
+
+最后stage1的drop-level规则用户将错误提取出来的level字段删除（可能有些消息不具有level字段，而错误的匹配了stage0的某个规则，因而使level字段出现g/t等一类的值）。
+
 另外Level需注意的是，由于graylog内置有level字段，且该字段默认为int类型，所以我们自定义的level字段不能以全为小写的leve命名，否则会报错。目前是将L字母大写。
 ## 通用信息处理pipeline（后续规范化后需注意）
 因为公司的日志信息正在逐渐规范，所以在以后只需要一个规则就能匹配所有的日志。这部分的规则为stage0的normal_message_pipeline规则。该规则能够提取出component,thread-id,level，error-code,session-id,transaction-id字段。一个消息样例如下：
@@ -565,6 +570,7 @@ graylog中存在流的概念，相当于在消息到来时候，可以根据一�
      基于官网sample_plugin改写的插件，使用了telegram alert的一些配置。 telegram alert源码地址 ` https://github.com/irgendwr/TelegramAlert.git`
 
      改写后的源码地址：当前目录下的`./my_dingding_alert/`中，改写后生成的jar包在当前目录下的`./jar/`中。使用时需要将钉钉告警插件添加到graylog容器中。
+     自定义报警方法主要是修改``文件中的``函数。
 
      graylog.yml文件需要增加配置如下：
 
